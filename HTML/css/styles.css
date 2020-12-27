@@ -1,0 +1,31 @@
+/*******Tag-Selector********/
+body{
+  background-color: aliceblue;
+}
+hr{
+  background-color: aliceblue;
+  border-style:none;
+  border-top-style: dotted;
+  border-color: cadetblue ;
+  border-width: 6px;
+  width: 6%;
+}
+
+h1 {
+color: #2f4f4f;
+}
+
+h3{
+color: #708090;
+}
+
+img{
+border-radius: 100%;
+}
+/*******Class-Selector********/
+.Facebook{
+color: #2f4f4f;
+}
+.Facebook:hover{
+color: #708090;
+}

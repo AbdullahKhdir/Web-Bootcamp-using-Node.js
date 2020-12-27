@@ -1,0 +1,5 @@
+npm init 			//create json file.
+npm install express		//Install FW to the project folder
+$ npm install body-parser	//to Perform and post operations
+npm install -g nodemon		//auto update the ExpressServer.js
+

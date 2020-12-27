@@ -1,0 +1,43 @@
+www.codepen.io
+							-------------
+MDN documentation on headings:
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
+
+							-------------
+MDN Table documentation;
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
+
+							-------------
+MDN Input documentation
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+
+							-------------
+https://developer.mozilla.org/en-US/docs/Web/HTML
+
+							-------------
+
+https://colorhunt.co/
+
+							-------------
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
+
+							-------------
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/border-style#Values
+
+							-------------
+Alternative reference devdocs.io:
+
+https://devdocs.io/
+
+							-------------
+
+https://emojipedia.org/
+
+							-------------
+
+resources:- https://www.appbrewery.co/p/web-development-course-resources/

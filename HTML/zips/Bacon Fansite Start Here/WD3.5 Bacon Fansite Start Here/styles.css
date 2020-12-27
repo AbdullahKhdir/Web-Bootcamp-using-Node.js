@@ -1,0 +1,28 @@
+/*************Tag-Selector************/
+h1{
+color: brown;
+}
+
+p{
+color: brown;
+}
+div {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation-name: example;
+  animation-duration: 4s;animation-iteration-count: infinite;
+}
+/*************Class-Selector************/
+.bacon{
+
+background-color: #ffebcd;
+}
+/*************Animation-Selector************/
+@keyframes example {
+  0%   {left:0px; top:0px;}
+  25%  {left:50px; top:0px;}
+  50%  {left:50px; top:50px;}
+  75%  {left:0px; top:50px;}
+  100% {left:0px; top:0px;}
+}

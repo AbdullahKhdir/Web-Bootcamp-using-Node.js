@@ -1,0 +1,11 @@
+-for loading screen:-
+
+<script>
+    &(windows).on("load",function(){
+        $(".loader-wrapper").fadeOut("slow");
+    });
+
+  </script>
+
+
+

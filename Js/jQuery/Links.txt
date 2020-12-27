@@ -1,0 +1,13 @@
+resources:- https://www.appbrewery.co/p/web-development-course-resources/
+
+							-----------------
+
+-Js writing good:- https://github.com/rwaldron/idiomatic.js
+
+							-----------------
+
+
+							-----------------
+
+
+

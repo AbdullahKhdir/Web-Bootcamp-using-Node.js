@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Photos Generator.</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <div class="goback">
+      <div class="">
+
+      </div>
+    </div>
+    <div class="content">
+      <img src="https://picsum.photos/1900/980/?random" alt="" width="100%" height="auto">
+      <div class="back">
+        <a href="index.html" class="backButton"> ← </a>
+      </div>
+    </div>
+    <div id="loader">
+      <div class="square1"></div>
+      <div class="square1"></div>
+      <div class="square1"></div>
+      <div class="square1"></div>
+      <div class="square1"></div>
+    </div>
+    <script type="text/javascript">
+    setTimeout(function(){
+       window.location.reload(1);
+    }, 8000);
+    </script>
+    <script>
+      var loader = document.getElementById("loader"); window.onload = function(){ document.getElementById("loader").style.display = "none";}
+    </script>
+  </body>
+</html>

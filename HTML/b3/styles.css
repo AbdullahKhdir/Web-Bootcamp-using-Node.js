@@ -1,0 +1,23 @@
+
+.heading1{
+text-align: center;
+}
+#heading1{
+text-align: center;
+}
+.desc{
+margin: 0% 0% 0 10%;
+text-align: center;
+width: 80%;
+}
+
+.tbl{
+margin: 0% 0% 0 30%;
+}
+.txt{
+text-align: center;
+}
+.tbl_caption{
+caption-side: bottom;
+text-align: center;
+}
