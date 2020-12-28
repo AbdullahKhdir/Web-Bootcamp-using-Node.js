@@ -1,0 +1,7 @@
+https://mailchimp.com
+user: AbdullKh
+pwd: 852xXx!
+-------------
+DevDocumentation.
+https://mailchimp.com/developer/api/marketing/lists/
+-------------
