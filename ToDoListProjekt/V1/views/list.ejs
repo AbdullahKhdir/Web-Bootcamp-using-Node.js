@@ -1,0 +1,29 @@
+<%- include("header") -%>
+
+    <div class="box" id="heading">
+      <h1> <%= title %> </h1>
+    </div>
+
+    <div class="box">
+      <% for(var i = 0; i<newListItems.length; i++){ %>
+      <div class="item">
+        <input type="checkbox">
+        <p> <%= newListItems[i] %> </p>
+      </div>
+      <% } %>
+
+      <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="Add new item" autocomplete="off">
+        <button type="submit" name="button" value=<%= title %>>+</button>
+        <button type="submit" name="button" value=<%= "remove-" + title  %>>-</button>
+      </form>
+    </div>
+
+<%- include("footer") -%>
+<!--  <% if (title === "Saturday" || title === "Sunday") { %>
+        <h1 style="color: orange;">It's a <%= title %>!</h1>
+        <h1 style="color: purple;"><%= title %> toDo List!</h1>
+  <% } else{ %>
+    <h1 style="color: Blue;">It's a <%= title %>!</h1>
+    <h1 style="color: purple;"><%= title %> toDo List!</h1>
+  <% } %>-->
