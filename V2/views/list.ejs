@@ -1,0 +1,26 @@
+<%- include("header") -%>
+
+    <div class="box" id="heading">
+      <h1> <%= title %> </h1>
+    </div>
+
+    <div class="box">
+      <% newListItems.forEach((item, i) => { %>
+        <form name="postPop" id="postPop" class="postPop" action="/" method="post">
+        <div class="item">
+            <input  type="checkbox" name="checkbox" value="<%= item.name %>" oninvalid="this.setCustomValidity('select an item to remove')" onchange="this.form.submit();">
+            <p> <%= item.name %> </p>
+        </div>
+      </form>
+      <% }); %>
+
+    <!-- <form id="postPop" action="/" method="post">
+      </form>-->
+      <form id="postPush" class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="Add new item" autocomplete="off" required oninvalid="this.setCustomValidity('Please type a text')">
+        <button form="postPush" type="submit" name="button" value=<%= title %>>+</button>
+        <button form="postPop" type="submit" name="button" value=<%= "remove-" + title %>>-</button>
+      </form>
+    </div>
+
+<%- include("footer") -%>

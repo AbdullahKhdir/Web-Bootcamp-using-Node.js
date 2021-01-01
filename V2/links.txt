@@ -1,0 +1,24 @@
+https://www.appbrewery.co/p/web-development-course-resources
+
+https://nodejs.org/api/index.html
+
+https://ejs.co/#install
+
+https://www.google.com/search?rlz=1C1CHBD_enDE927DE927&sxsrf=ALeKk00Bs62_UGu-Eordf9CRv-lkLEzMZQ%3A1609155535952&ei=z8PpX-TiOY2ZlwSP_qPQDg&q=use+jquery+in+node+express&oq=using+jquery+in+node&gs_lcp=CgZwc3ktYWIQAxgBMgUIABDJAzIGCAAQFhAeOgcIIxCwAxAnOgcIABCwAxBDOgcIABBHELADOgQIIxAnOggIABDJAxCRAjoFCAAQkQI6BQgAELEDOggIABCxAxCDAToOCC4QsQMQgwEQxwEQowI6CggAELEDEMkDEEM6BAgAEEM6BwgAELEDEEM6AggAOgQILhAKOgcIABAUEIcCUPAQWKo1YMFDaAJwAngAgAGSAYgBihSSAQQwLjIxmAEAoAEBqgEHZ3dzLXdpesgBCsABAQ&sclient=psy-ab
+
+
+https://www.npmjs.com/package/jquery
+
+http://expressjs.com/en/4x/api.html#res
+
+https://lodash.com/docs/4.17.15#isEqual
+
+
+https://mongoosejs.com/docs/api.html#model_Model.listIndexes
+
+
+https://nodejs.org/api/http.html
+
+
+to update the npm modules download the project and delete the node module then run the cmd 
+npm install to update all the modules
