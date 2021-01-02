@@ -24,3 +24,12 @@ to update the npm modules download the project and delete the node module then r
 npm install to update all the modules
 
 toDo- v2 & v3 === v4
+
+
+------------------------------------------------
+
+https://infinite-earth-56959.herokuapp.com/
+
+------------------------------------------------
+
+mongoshell "mongodb+srv://mongodb.7trds.mongodb.net/<dbname>" --username admin-abdullah
