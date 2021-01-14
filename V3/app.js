@@ -8,11 +8,12 @@ var async = require("async");
 /*const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );*/
+
 const app = express();
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
-mongoose.connect('mongodb://localhost:27017/todolistDB', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+mongoose.connect('mongodb+srv://admin-abdullah:start123@mongodb.7trds.mongodb.net/todolistDB', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 let cBox =[];
 let day = date.getDay();
@@ -24,10 +25,8 @@ const DYN_LIST_SCHEMA = {
 name : String,
 items: [ITEMS_SCHEMA] //create a relation to items schema from the item variable
 };
-
 const collectionItem = mongoose.model("item",ITEMS_SCHEMA);
 const collectionList = mongoose.model("List", DYN_LIST_SCHEMA);
-
 const defaultItem = new collectionItem({
     name: "New list is added!"
 });
@@ -74,7 +73,7 @@ app.post("/" , function(req, res){
           }
         }
       ]);
-    //  insertItemDyn.save;
+    //insertItemDyn.save;
       res.redirect("/");
     }else {
       console.log("dynPageName is : " + getListName);
@@ -93,8 +92,7 @@ app.post("/delete", function(req, res){
 
     if (getListName === "Today") {
       console.log("List :"+getListName);
-      collectionItem.bulkWrite([
-        {
+      collectionItem.bulkWrite([        {
           deleteOne:{
               filter: { name: CBOX }
           }
@@ -110,9 +108,6 @@ app.post("/delete", function(req, res){
       });
     }
   });
-
-
-
 
 app.get("/:dynPage", function(req, res){
 
@@ -138,6 +133,11 @@ app.get("/:dynPage", function(req, res){
   });
 });
 
-app.listen(3000, function(){
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
+app.listen(port, function(){
   console.log("Server is on !");
 });

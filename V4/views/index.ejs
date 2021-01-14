@@ -1,0 +1,79 @@
+<%- include("header") -%>
+
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+            <h3>ToDo List</h3>
+            <strong>TD</strong>
+        </div>
+        <ul class="list-unstyled components">
+          <li class="active">
+              <a href="<%= home %>">
+                  <i class="fas fa-home"></i>
+                  Home
+              </a>
+          </li>
+          <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
+                  <i class="fas fa-paperclip"></i>
+                  Pages
+              </a>
+              <ul class="list-unstyled collapse" id="pageSubmenu">
+                  <li>
+                      <a href="<%= lists %>">Index </a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="<%= add %>">
+              <i class="fas fa-list-ul"></i>
+              Add new list
+            </a>
+         </li>
+        </ul>
+    </nav>
+    <!-- Page Content  -->
+    <div id="content">
+            <div class="boxHeader" id="heading">
+              <h1 style="color: #374045;"> <%= title %> </h1>
+            </div>
+            <div class="boxBorder">
+              <div class="box">
+                <% newListItems.forEach((item, i) => { %>
+                <form name="cBoxForm" id="cBoxForm" class="cBoxForm" action="/pushSelectedItem" method="post">
+                  <div class="item">
+                      <input type="checkbox" name="checkbox" value="<%= item._id %>" oninvalid="this.setCustomValidity('select an item to remove')" onchange="this.form.submit();">
+                      <p class="pTxt"> <%= item.name %> </p>
+                  </div>
+                </form>
+                <% }); %>
+                <form id="postPush" class="item" action="/" method="post">
+                  <input id="itemInput" type="text" name="newItem" placeholder="Add new item" autocomplete="off" oninvalid="this.setCustomValidity('Please type a text')">
+                  <button form="postPush" type="submit" name="list" value="<%= title %>">+</button>
+                  <button form="postPop" type="submit" name="listRemove" value=<%= "removeItem-"+ title %>>-</button>
+                </form>
+                <% newListItems.forEach((item, i) => { %>
+                    <form name="postPop" id="postPop" class="postPop" action="/delete" method="post">
+                      <input type="hidden" name="listName" value="<%= title %>"></input>
+                    </form>
+                    <% }); %>
+                </div>
+            </div>
+                  <%- include("footer") -%>
+    </div>
+</div>
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+</script>
