@@ -25,6 +25,7 @@
     "smoothscroll-polyfill": "^0.4.4"
   },
   "scripts": {
+    "heroku-postbuild": "gatsby build",
     "start" : "gatsby serve",
     "develop": "gatsby develop",
     "build": "npm run clean && gatsby build",
@@ -49,4 +50,5 @@
     "url": ""
   },
   "homepage": ""
+
 }
