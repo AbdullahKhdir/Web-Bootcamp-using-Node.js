@@ -25,7 +25,7 @@
     "smoothscroll-polyfill": "^0.4.4"
   },
   "scripts": {
-    "start" : "gatsby develop",
+    "start" : "gatsby serve",
     "develop": "gatsby develop",
     "build": "npm run clean && gatsby build",
     "deploy": "npm run clean && gatsby build --prefix-paths && gh-pages -d public",
