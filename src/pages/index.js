@@ -24,13 +24,8 @@ const IndexPage = () => (
           <p className="lead mb-5">
               Ich bin Abdullah, Khdir, 24 Jahre alt und komme aus Syrien. Ich bin seit 5 Jahren in Deutschland und absolviere gerade
               eine Ausbildung als Fachinformatiker für Anwendungsentwicklung bei der Deutschen Telekom AG.
-              Während meiner Ausbildung, hatte ich Erfahrungen in unterschiedlichen Bereichen gesammelt, die in der Telekommunikationswelt ankommen,
-              und in der IT-Welt als Programmierer unterstüzt.
-              Ich hatte auch Erfahrungen in dem Automatisierungsbereich, wo es unterschiedliche Netzkomponenten durch Agenten gesteuert und automatisiert werden.
-              Ich hatte in der Ausbildung kurz auf ein Projekt gearbeitet, dass es sich mit der Entwicklung vom Agent befasst, dass es später der Steuerung und Automatisierung von
-              Power-Distribution-Units eingesetzt wird und ich habe mit der Entwicklung von automatisierten System-Tests unterstützt.
-              Außerdem sammelte ich Wissen über die Entwicklung von Web-Applikationen mit der Nutzung von umfangreichen Technologien,
-              als auch der Entwurf von Oberflächen.
+              Während meiner Ausbildung habe ich Erfahrungen in unterschiedlichen Bereichen gesammelt, die in der Telekommunikationswelt wichtig sind und in der IT-Welt als Programmierer benötigt werden.
+              Ich habe auch Erfahrungen in dem Automatisierungsbereich, wo unterschiedliche Netzkomponenten durch Agenten gesteuert und automatisiert werden können. In der Ausbildung habe ich an einem Projekt gearbeitet, dass sich mit der Entwicklung vom SNMP-Agent befasst, welches später für die Steuerung und Automatisierung von Power-Distribution-Units eingesetzt wurde. Zusätzlich habe ich mit der Entwicklung von automatisierten System-Tests die Qualität des Projekts geprüft. Außerdem sammelte ich Wissen über die Entwicklung von Web-Applikationen mit der Nutzung von umfangreichen Technologien, als auch Erfahrungen für den Entwurf und Entwicklung von Oberflächen (GUI).
           </p>
           <div className="social-icons">
             {config.socialLinks.map(social => {
@@ -43,16 +38,12 @@ const IndexPage = () => (
             })}
           </div>
         </div>
-
       </section>
-
       <hr className="m-0" />
-
       <section
         className="resume-section p-3 p-lg-5 d-flex justify-content-center"
         id="experience"
       >
-
         <div className="w-100">
           <h2 className="mb-5">Erfahrungen</h2>
           <div className="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
@@ -60,8 +51,10 @@ const IndexPage = () => (
               <h3 className="mb-0">Autiomatisierungsbereich</h3>
               <div className="subheading mb-3">Deutsche Telekom Technik GmbH</div>
               <p>
-                Ich habe ein Agent entwickelt, dass es der Steuerung von Power-Distribution-Units durch SNMP-Protokoll dient.
-                Und habe ich an unterschiedliche automatisierungs Lösungen gearbeitet, die durch das Agent Netzkomponenten automatisiert werden.
+                Ich habe ein SNMP-Agent der Hilfe von Programmiersprahe Java entwickelt,
+                welcher zur Steuerung von Power-Distribution-Units durch SNMP-Protokoll dient.
+                Ebenso habe ich an unterschiedlichen Automatisierungs-Lösungen gearbeitet,
+                die Netzkomponenten durch den Agent automatisiert werden können.
               </p>
             </div>
             <div className="resume-date text-md-right">
@@ -73,8 +66,8 @@ const IndexPage = () => (
               <h3 className="mb-0">Entwicklung Web-Applikationen</h3>
               <div className="subheading mb-3">Berufliche Entwicklung</div>
               <p>
-                Ich habe an Projekten Erfahrungen gesammelt, die die Entwicklung von Web-Applikationen mit der Nutzung von MERN-Technologien.
-                Als auch habe ich an separaten Frontends-Applikationen gearbeitet.
+                Durch verschiedene Projekte könnte ich im Bereich Entwicklung von Web-Applikationen mit der Nutzung von MERN-Technologien Kenntnisse aneigenen.
+                Zusätzlich bin ich auch mit separaten Frontends-Applikationen vertraut.
               </p>
             </div>
             <div className="resume-date text-md-right">
@@ -86,7 +79,7 @@ const IndexPage = () => (
               <h3 className="mb-0">Entwicklung von Graphical User Interface</h3>
               <div className="subheading mb-3">Deutsche Telekom Technik GmbH</div>
               <p>
-                Ich habe eine Graphical-User-Interface für ein Power-Distribution-Unit-Device entwickelt, die die Funktionalitäten des Produkts steuert.
+                Ich habe eine Graphical-User-Interface mit der Hilfe von Programmiersprahe Java für ein Power-Distribution-Unit-Device entwickelt, die die Funktionalitäten des Produkts steuert
                 und überwacht.
               </p>
             </div>
@@ -99,7 +92,8 @@ const IndexPage = () => (
               <h3 className="mb-0">Entwicklung und Betreuung von Datenbank</h3>
               <div className="subheading mb-3">Deutsche Telekom Technik GmbH</div>
               <p>
-                Ich habe eine Oberfläche für eine Datenbank mit der Nutzung von MS-Access betreut und entwickelt, die sich mit den Tools aller Abteilungen befasst.
+                Ich habe eine Oberfläche für eine Datenbank mit der Nutzung von MS-Access entwickelt und betreut,
+                die sich mit den Tools aller Abteilungen befasst.
               </p>
             </div>
             <div className="resume-date text-md-right">
@@ -135,7 +129,7 @@ const IndexPage = () => (
                 <h3 className="mb-0">Sprachliche Kenntnisse</h3>
               <div className="subheading mb-3">Universität Oldenburg</div>
               <div>Abschluss Sprachkurs DSH-1 mit Zertifikat</div>
-                <p></p>
+                <p>Ich verfüge auch über sehr gute Kenntnisse in englische Sprache</p>
             </div>
             <div className="resume-date text-md-right">
               <span className="text-primary">März 2017 - Februar 2018</span>
@@ -145,7 +139,7 @@ const IndexPage = () => (
           <div className="resume-item d-flex flex-column flex-md-row justify-content-between">
             <div className="resume-content">
               <h3 className="mb-0">Al Imam Ali Senior High School, Amman</h3>
-              <div className="subheading mb-3">Gymnasium</div>
+              <div className="subheading mb-3">Gymnasium Abitur</div>
                 <p></p>
               </div>
               <div className="resume-date text-md-right">
@@ -171,6 +165,12 @@ const IndexPage = () => (
           <ul className="list-inline dev-icons">
             <li className="list-inline-item">
             <i className="fab fa-java"></i>
+            </li>
+            <li className="list-inline-item">
+              <i class="fab fa-cuttlefish">++</i>
+            </li>
+            <li className="list-inline-item">
+              <i class="fab fa-cuttlefish">#</i>
             </li>
             <li className="list-inline-item">
               <i className="fab fa-html5"></i>
