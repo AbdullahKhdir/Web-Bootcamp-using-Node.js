@@ -22,10 +22,12 @@ const IndexPage = () => (
             <a href={`mailto:${config.email}`}>{config.email}</a>
           </div>
           <p className="lead mb-5">
-              Ich bin Abdullah, Khdir, 24 Jahre alt und komme aus Syrien. Ich bin seit 5 Jahren in Deutschland und absolviere gerade
-              eine Ausbildung als Fachinformatiker für Anwendungsentwicklung bei der Deutschen Telekom AG.
+              Ich bin Abdullah, Khdir, 25 Jahre alt und komme aus Syrien. Ich bin seit 7 Jahren in Deutschland und arbeite gerade
+              als Full Stack Web Developer bei der Deutschen Telekom Individual Solutions &amp; Products GmbH.
+              In 2021 absolvierte ich eine Ausbildung als Fachinformatiker für Anwendungsentwicklung bei der Deutschen Telekom AG.
               Während meiner Ausbildung habe ich Erfahrungen in unterschiedlichen Bereichen gesammelt, die in der Telekommunikationswelt wichtig sind und in der IT-Welt als Programmierer benötigt werden.
-              Ich habe auch Erfahrungen in dem Automatisierungsbereich, wo unterschiedliche Netzkomponenten durch Agenten gesteuert und automatisiert werden können. In der Ausbildung habe ich an einem Projekt gearbeitet, dass sich mit der Entwicklung vom SNMP-Agent befasst, welches später für die Steuerung und Automatisierung von Power-Distribution-Units eingesetzt wurde. Zusätzlich habe ich mit der Entwicklung von automatisierten System-Tests die Qualität des Projekts geprüft. Außerdem sammelte ich Wissen über die Entwicklung von Web-Applikationen mit der Nutzung von umfangreichen Technologien, als auch Erfahrungen für den Entwurf und Entwicklung von Oberflächen (GUI).
+              Ich habe auch Erfahrungen in dem Automatisierungsbereich, wo unterschiedliche Netzkomponenten durch Agenten gesteuert und automatisiert werden können, und habe an die Entwicklung vom SNMP-Agent gearbeitet, welches für die Steuerung und Automatisierung von Power-Distribution-Units eingesetzt werden kann. Zusätzlich habe ich mit der Entwicklung von automatisierten System-Tests die Qualität des Projekts geprüft, und sammelte ich Wissen über die Entwicklung von Web-Applikationen mit der Nutzung von umfangreichen Technologien, als auch Erfahrungen für den Entwurf und Entwicklung von Oberflächen (GUI).
+              Aktuell spezielaisiere ich konkret und tief in den unterschiedlichen Technologien und Framework, die sich um die Web-Entwicklung umdrehen.
           </p>
           <div className="social-icons">
             {config.socialLinks.map(social => {
@@ -48,6 +50,19 @@ const IndexPage = () => (
           <h2 className="mb-5">Erfahrungen</h2>
           <div className="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
             <div className="resume-content">
+              <h3 className="mb-0">Full Stack PHP Web Developer</h3>
+              <div className="subheading mb-3">Deutsche Telekom Individual Solutions &amp; Products GmbH</div>
+              <p>
+                Durch den Einsatz vom Laravel Framework arbeite ich an den Entwickelung bzw. Implementierung, Anpassung, Data-Model-Entwurf, Testing, und Organisierung von einem Tool,
+                die Aufträge und Verträge globalen und lokalen Kunden archiviert und adressiert.
+              </p>
+            </div>
+            <div className="resume-date text-md-right">
+              <span className="text-primary">Juni 2021 - Präsens</span>
+            </div>
+          </div>
+          <div className="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+            <div className="resume-content">
               <h3 className="mb-0">Autiomatisierungsbereich</h3>
               <div className="subheading mb-3">Deutsche Telekom Technik GmbH</div>
               <p>
@@ -58,7 +73,7 @@ const IndexPage = () => (
               </p>
             </div>
             <div className="resume-date text-md-right">
-              <span className="text-primary">März 2021 - Präsens</span>
+              <span className="text-primary">März 2021 - Juni 2021</span>
             </div>
           </div>
           <div className="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
@@ -189,6 +204,15 @@ const IndexPage = () => (
             </li>
             <li className="list-inline-item">
               <i className="fab fa-npm"></i>
+            </li>
+            <li className="list-inline-item">
+              <i className="fab fa-php"></i>
+            </li>
+            <li className="list-inline-item">
+              <i className="fab fa-laravel"></i>
+            </li>
+            <li className="list-inline-item">
+              <i className="fab fa-github"></i>
             </li>
           </ul>
 
