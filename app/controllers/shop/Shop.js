@@ -74,12 +74,14 @@ module.exports = class Shop extends BaseController{
             }
             user_cart
                 .then(rows => {
+                    // console.log(rows);
                     rows['getCartItems']
-                        .then(users_cart => {
+                    .then(users_cart => {
                             users_cart['getCartItems'].then(result => {
                                 console.log(result);
                             });
                         });
+                    // console.log(rows);
                     const cart_products = rows[0]; 
                     res.render(
                         'shop/cart',
