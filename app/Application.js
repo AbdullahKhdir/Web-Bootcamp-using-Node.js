@@ -2,11 +2,12 @@
 /*
 * Npm and Node Modules 
 */
-const Bodyparser = require('../core/node/Bodyparser.js');
-const Path = require('../core/node/Path.js');
+const Bodyparser     = require('../core/node/Bodyparser.js');
+const Path           = require('../core/node/Path.js');
 const BaseController = require('../core/controller/BaseController.js');
-const Constants = require('./utils/Constants.js');
-const Lodash = require('./utils/Lodash.js');
+const Constants      = require('./utils/Constants.js');
+const Lodash         = require('./utils/Lodash.js');
+const helmet         = require("helmet");
 
 module.exports = class Application extends BaseController {
 
@@ -28,6 +29,44 @@ module.exports = class Application extends BaseController {
         * Init The Application
         */
         app = this.express();
+        
+        /*
+        * Sets the follwing policies
+          ! contentSecurityPolicy
+          ! crossOriginEmbedderPolicy
+          ! crossOriginOpenerPolicy
+          ! crossOriginResourcePolicy
+          ! dnsPrefetchControl
+          ! expectCt
+          ! frameguard
+          ! hidePoweredBy
+          ! hsts
+          ! ieNoOpen 
+          ! noSniff
+          ! originAgentCluster 
+          ! permittedCrossDomainPolicies
+          ! referrerPolicy
+          ! xssFilter
+        */
+        app.use(helmet.contentSecurityPolicy());
+        app.use(helmet.crossOriginEmbedderPolicy());
+        app.use(helmet.crossOriginOpenerPolicy());
+        app.use(helmet.crossOriginResourcePolicy());
+        app.use(helmet.dnsPrefetchControl());
+        app.use(helmet.expectCt());
+        app.use(helmet.frameguard());
+        app.use(helmet.hidePoweredBy());
+        app.use(helmet.hsts());
+        app.use(helmet.ieNoOpen());
+        app.use(helmet.noSniff());
+        app.use(helmet.originAgentCluster());
+        app.use(helmet.permittedCrossDomainPolicies());
+        app.use(helmet.referrerPolicy());
+        app.use(helmet.xssFilter());
+
+        /*
+        * AUTO ESCAPE JSON
+        */
         app.set('json escape', true);
        
         /*
@@ -48,7 +87,20 @@ module.exports = class Application extends BaseController {
         /*
         * Middleware To Set Static Public Folder
         */
-        app.use(this.express.static(this.path.join(__dirname, 'public')));
+        var options = {
+            dotfiles: 'ignore',
+            etag: true,
+            extensions: ['ejs'],
+            fallthrough: true,
+            immutable: true,
+            index: false,
+            maxAge: '1d',
+            redirect: false,
+            setHeaders: function (res, path, stat) {
+              res.set('x-timestamp', Date.now())
+            }
+        }
+        app.use(this.express.static(this.path.join(__dirname, 'public'), options));
 
         /*
         * Middleware To Always Get The First User

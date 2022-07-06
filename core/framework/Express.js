@@ -1,8 +1,8 @@
 'use strict';
 
-const Response = require('../response/types/Response');
+const ApiResponse = require('../response/ApiResponse');
 
-module.exports = class Express extends Response{
+module.exports = class Express extends ApiResponse{
     
     constructor(framework = require('express')) {
         super();

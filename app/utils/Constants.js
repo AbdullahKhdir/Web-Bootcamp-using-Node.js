@@ -178,6 +178,52 @@ module.exports = class Constants{
                     TRANSFORMATION_APPLIED:           214,
                     MISCELLANEOUS_PERSISTENT_WARNING: 299
                 }
+            },
+            RESPONSE: {
+                TYPES: {
+                    HTML:         'html',
+                    JSON:         'application/json',
+                    TEXT:         'text/plain',
+                    TEXT_XML:     'text/xml',
+                    XML:          'xml',
+                    APP_XML:      'application/xml',
+                    TEXT_HTML:    'text/html',
+                    PNG:          'png',
+                    JPEG:         'jpeg',
+                    JPG:          'jpg',
+                    JPE:          'jpe',
+                    JIF:          'jif',
+                    JFIF:         'jfif',
+                    JFI:          'jfi',
+                    SVG:          'svg',
+                    SVGZ:         'svgz',
+                    GIF:          'gif',
+                    WEBP:         'webp',
+                    TIFF:         'tiff',
+                    TIF:          'tif',
+                    PSD:          'psd',
+                    RAW:          'raw',
+                    ARW:          'arw',
+                    CR2:          'cr2',
+                    NRW:          'nrw',
+                    K25:          'k25',
+                    BMP:          'bmp',
+                    DIB:          'dib',
+                    HEIF:         'heif',
+                    HEIC:         'heic',
+                    INDD:         'indd',
+                    IND:          'ind',
+                    INDT:         'indt',
+                    JPEG_2000:    'jp2',
+                    JPEG_2000_K:  'j2k',
+                    JPEG_2000_PF: 'jpf',
+                    JPEG_2000_PX: 'jpx',
+                    JPEG_2000_PM: 'jpm',
+                    JPEG_2000_MJ: 'mj2',
+                    AI:           'ai',
+                    EPS:          'eps',
+                    PDF:          'pdf'
+                }
             }
         }
         this.#constants = Object.assign(constants);

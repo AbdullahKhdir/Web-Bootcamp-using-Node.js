@@ -52,25 +52,16 @@ module.exports = class Shop extends BaseController{
         // throw new BadRequestError('User not registered');
         // return new JsonResponse('SUCCESS', this._.pick({ 'a': 1, 'b': '2', 'c': 3 }, ['a', 'c'])).sendAsJson(res);
         user_products
-        .then((rows) => {
-            return this.render(
-                res,
-                'shop/index',
-                {
-                    products: rows,
-                    page_title: 'Shop',
-                    path: '/'
-                }
-            );
-            // res.render(
-            //         'shop/index',
-            //         {
-            //             products: rows,
-            //             page_title: 'Shop',
-            //             path: '/',
-            //             cache: true
-            //         }
-            //     );
+            .then((rows) => {
+                return this.render(
+                    res,
+                    'shop/index',
+                    {
+                        products: rows,
+                        page_title: 'Shop',
+                        path: '/'
+                    }
+                );
             })
             .catch(err => console.log(err)); 
     });
