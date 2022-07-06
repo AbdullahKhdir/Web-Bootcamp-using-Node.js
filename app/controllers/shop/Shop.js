@@ -1,9 +1,12 @@
 'use strict';
 
-const BaseController = require("../../../core/controller/BaseController");
-const Cart = require("../../models/shop/Cart");
-const CartItem = require("../../models/shop/CartItem");
-const Product = require("../../models/shop/Product");
+const BaseController  = require("../../../core/controller/BaseController");
+const BadRequestError = require("../../../core/error/types/BadRequestError");
+const JsonResponse = require("../../../core/response/types/JsonResponse");
+const Response = require("../../../core/response/types/Response");
+const Cart            = require("../../models/shop/Cart");
+const CartItem        = require("../../models/shop/CartItem");
+const Product         = require("../../models/shop/Product");
 
 /*
 * Customer Actions 
@@ -46,54 +49,64 @@ module.exports = class Shop extends BaseController{
 
     index = () => this.getRouterInstance().get('/shop', (req, res, next) => {
         const user_products = req.registered_user.getProducts();
-        let query = new CartItem();
-        let query_2 = new Cart();
-        query_2.all()
-            .then(rows => {
-            });
-
+        // throw new BadRequestError('User not registered');
+        // return new JsonResponse('SUCCESS', this._.pick({ 'a': 1, 'b': '2', 'c': 3 }, ['a', 'c'])).sendAsJson(res);
         user_products
-            .then((rows) => {
-                res.render(
-                    'shop/index',
-                    {
-                        products: rows,
-                        page_title: 'Shop',
-                        path: '/'
-                    }
-                );
+        .then((rows) => {
+            return this.render(
+                res,
+                'shop/index',
+                {
+                    products: rows,
+                    page_title: 'Shop',
+                    path: '/'
+                }
+            );
+            // res.render(
+            //         'shop/index',
+            //         {
+            //             products: rows,
+            //             page_title: 'Shop',
+            //             path: '/',
+            //             cache: true
+            //         }
+            //     );
             })
             .catch(err => console.log(err)); 
     });
 
-    cart() { 
+    cart() {
         return this.getRouterInstance().get('/cart', (req, res, next) => {
             const user_cart = req.registered_user.getCart();
             if (!user_cart) {
                 throw new Error('User is not availabel');
             }
             user_cart
-                .then(rows => {
-                    // console.log(rows);
-                    rows['getCartItems']
-                    .then(users_cart => {
-                            users_cart['getCartItems'].then(result => {
-                                console.log(result);
-                            });
-                        });
-                    // console.log(rows);
-                    const cart_products = rows[0]; 
-                    res.render(
-                        'shop/cart',
-                        {
-                            page_title: 'My Cart',
-                            path : '/cart/',
-                            products: cart_products
+            .then(rows => {
+                rows['getProducts']
+                .then(users_cart => {
+                    users_cart['getProducts'].then(cart_products => {
+                        if (cart_products.length > 0) {
+                            if (!this._.isEmpty(cart_products)) {
+                                this.product.filter({id: cart_products[0].product_id})
+                                .then((rows) => {
+                                    cart_products[0]['title'] = rows[0].title; 
+                                    res.render(
+                                        'shop/cart',
+                                        {
+                                            page_title: 'My Cart',
+                                            path : '/cart/',
+                                            products: cart_products
+                                        }
+                                    );
+                                })
+                                .catch(err => console.log(err));
+                            }
                         }
-                    );
-                })
-                .catch(err => console.log(err));
-
+                    });
+                }); 
+            })
+            .catch(err => console.log(err));
         });
     }
 

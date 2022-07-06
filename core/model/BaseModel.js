@@ -131,73 +131,37 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let where_col = this.reverse_references[key].where_column ?? false;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
                         let reverse_name  = key;
-                        let condition     = '';
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
                         .then((id) =>
                             {
                                 if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
                                     if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
-                                        return this.mysql.query(
-                                            'SELECT COLUMN_NAME FROM information_schema.COLUMNS '+
-                                            'WHERE TABLE_SCHEMA = "node" '+
-                                            'AND TABLE_NAME = "'+reverse_table+'" '+
-                                            'AND COLUMN_NAME = "'+where_col+'" '
-                                        ).then(([_rows, _fields]) => {
-                                            if (this._.isEmpty(_rows)) {
-                                                return this.mysql.query(
-                                                    'SELECT COLUMN_NAME FROM information_schema.COLUMNS '+
-                                                    'WHERE TABLE_SCHEMA = "node" '+
-                                                    'AND TABLE_NAME = "'+rows['reverse_table_name']+'" '+
-                                                    'AND COLUMN_NAME = "'+where_col+'" '
-                                                ).then(([_rows_, _fields_]) => {
-                                                    if (!this._.isEmpty(_rows_)) {
-                                                        console.log(rows['reverse_table_name']);
-                                                        console.log(where_col);
-                                                        console.log(_rows_); //returns an empty resultes to be investigated
-                                                        for (const key in _rows_) {
-                                                            if (key.toString() === where_col) {
-                                                                condition = `where ${where_col} = ${_rows_[0][where_col]}`;
-                                                                console.log(condition);
-                                                                return {
-                                                                    [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table} ${condition}`) 
-                                                                                .then(([results, fields]) => results[0])
-                                                                                .catch(err => err)
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        return {
-                                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
-                                                                        .then(([results, fields]) => results[0])
-                                                                        .catch(err => err)
-                                                        }
-                                                    }
-                                                })
-                                                 .catch(err => console.log(err));
-                                            } else {
-                                                for (const key in _rows) {
-                                                    if (key.toString() === where_col) {
-                                                        condition = `where ${where_col} = ${_rows[0][where_col]}`;
-                                                        console.log(condition);
-                                                        return {
-                                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table} ${condition}`) 
-                                                                        .then(([results, fields]) => results[0])
-                                                                        .catch(err => err)
-                                                        }
-                                                    }
-                                                }
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
                                             }
-                                        }).catch(err => {
-                                            console.log('Error')
-                                            console.log(err)
                                         });
                                     }
                                 } else {
                                     return {
                                             [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
-                                                        .then(([results, fields]) => results[0])
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
                                     }
                                 }
@@ -222,6 +186,7 @@ module.exports = class BaseModel extends QueryBuilder {
             ).then(([rows, fields]) => {
                 if (!this._.isEmpty(rows)) {
                     for (const key in this.columns) {
+                        rows['reverse_table_name'] = this.table; 
                         let column_name = key;
                         let is_constraint = this.columns[column_name].references;
                         if (typeof is_constraint !== 'undefined') {
@@ -243,15 +208,42 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let reverse_name = key;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
+                        let reverse_name  = key;
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                        .then((id) => (
+                        .then((id) =>
                             {
-                                [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                        .then(([rows, fields]) => rows)
+                                if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                    if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    return {
+                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
+                                    }
+                                }
                             }
-                        ));
+                        );
                     }
                     return rows;
                 }
@@ -276,6 +268,7 @@ module.exports = class BaseModel extends QueryBuilder {
             ).then(([rows, fields]) => {
                 if (!this._.isEmpty(rows)) {
                     for (const key in this.columns) {
+                        rows['reverse_table_name'] = this.table; 
                         let column_name = key;
                         let is_constraint = this.columns[column_name].references;
                         if (typeof is_constraint !== 'undefined') {
@@ -297,15 +290,42 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let reverse_name = key;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
+                        let reverse_name  = key;
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                        .then((id) => (
+                        .then((id) =>
                             {
-                                [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                        .then(([rows, fields]) => rows)
+                                if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                    if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    return {
+                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
+                                    }
+                                }
                             }
-                        ));
+                        );
                     }
                     return rows;
                 }
@@ -352,6 +372,7 @@ module.exports = class BaseModel extends QueryBuilder {
             ).then(([rows, fields]) => {
                 if (!this._.isEmpty(rows)) {
                     for (const key in this.columns) {
+                        rows['reverse_table_name'] = this.table; 
                         let column_name = key;
                         let is_constraint = this.columns[column_name].references;
                         if (typeof is_constraint !== 'undefined') {
@@ -373,15 +394,42 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let reverse_name = key;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
+                        let reverse_name  = key;
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                        .then((id) => (
+                        .then((id) =>
                             {
-                                [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                        .then(([rows, fields]) => rows)
+                                if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                    if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    return {
+                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
+                                    }
+                                }
                             }
-                        ));
+                        );
                     }
                     return rows;
                 }
@@ -401,6 +449,7 @@ module.exports = class BaseModel extends QueryBuilder {
             ).then(([rows, fields]) => {
                 if (!this._.isEmpty(rows)) {
                     for (const key in this.columns) {
+                        rows['reverse_table_name'] = this.table; 
                         let column_name = key;
                         let is_constraint = this.columns[column_name].references;
                         if (typeof is_constraint !== 'undefined') {
@@ -422,15 +471,42 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let reverse_name = key;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
+                        let reverse_name  = key;
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                        .then((id) => (
+                        .then((id) =>
                             {
-                                [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                        .then(([rows, fields]) => rows)
+                                if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                    if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    return {
+                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
+                                    }
+                                }
                             }
-                        ));
+                        );
                     }
                     return rows;
                 }
@@ -455,6 +531,7 @@ module.exports = class BaseModel extends QueryBuilder {
             ).then(([rows, fields]) => {
                 if (!this._.isEmpty(rows)) {
                     for (const key in this.columns) {
+                        rows['reverse_table_name'] = this.table; 
                         let column_name = key;
                         let is_constraint = this.columns[column_name].references;
                         if (typeof is_constraint !== 'undefined') {
@@ -476,15 +553,42 @@ module.exports = class BaseModel extends QueryBuilder {
                 if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                     for (const key in this.reverse_references) {
                         let reverse_table = this.reverse_references[key].table;
-                        let reverse_name = key;
+                        let reverse_col   = this.reverse_references[key].column;
+                        let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_column : '';
+                        let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                        this.reverse_references[key].setting.where_table : '';
+                        let reverse_name  = key;
+                        
                         rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                        .then((id) => (
+                        .then((id) =>
                             {
-                                [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                        .then(([rows, fields]) => rows)
+                                if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                    if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                        return this.getTablePrimaryKey(where_tbl)
+                                        .then((_id) => {
+                                            const _statement = where_tbl && where_col && reverse_table ? 
+                                                            'SELECT * FROM '+reverse_table+' '+
+                                                            'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                            'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                            'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                            ')' : '';
+                                            return {
+                                                [reverse_name]: this.mysql.query(_statement) 
+                                                            .then(([results, fields]) => results)
+                                                            .catch(err => err)
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    return {
+                                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                        .then(([results, fields]) => results)
                                                         .catch(err => err)
+                                    }
+                                }
                             }
-                        ));
+                        );
                     }
                     return rows;
                 }
@@ -514,6 +618,7 @@ module.exports = class BaseModel extends QueryBuilder {
         ).then(([rows, fields]) => {
             if (!this._.isEmpty(rows)) {
                 for (const key in this.columns) {
+                    rows['reverse_table_name'] = this.table; 
                     let column_name = key;
                     let is_constraint = this.columns[column_name].references;
                     if (typeof is_constraint !== 'undefined') {
@@ -535,15 +640,42 @@ module.exports = class BaseModel extends QueryBuilder {
             if (typeof this.reverse_references === 'object' && typeof this.reverse_references !== 'undefined') {
                 for (const key in this.reverse_references) {
                     let reverse_table = this.reverse_references[key].table;
-                    let reverse_name = key;
+                    let reverse_col   = this.reverse_references[key].column;
+                    let where_col = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                    this.reverse_references[key].setting.where_column : '';
+                    let where_tbl = typeof this.reverse_references[key].setting !== 'undefined' ? 
+                                    this.reverse_references[key].setting.where_table : '';
+                    let reverse_name  = key;
+                    
                     rows[reverse_name] = this.getTablePrimaryKey(reverse_table)
-                    .then((id) => (
+                    .then((id) =>
                         {
-                            [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) //where ${id} = '${rows[0]}
-                                                    .then(([rows, fields]) => rows)
+                            if (where_col && typeof rows['reverse_table_name'] !== 'undefined') {
+                                if (typeof rows[0][where_col] !== 'undefined' || typeof rows[0][where_col] !== null || !this._.isEmpty(typeof rows[0][where_col])) {
+                                    return this.getTablePrimaryKey(where_tbl)
+                                    .then((_id) => {
+                                        const _statement = where_tbl && where_col && reverse_table ? 
+                                                        'SELECT * FROM '+reverse_table+' '+
+                                                        'WHERE '+reverse_table+'.'+reverse_col+' IN ('+
+                                                        'SELECT '+_id+' FROM '+where_tbl+' '+
+                                                        'WHERE '+where_col+' = '+rows[0][where_col]+' '+
+                                                        ')' : '';
+                                        return {
+                                            [reverse_name]: this.mysql.query(_statement) 
+                                                        .then(([results, fields]) => results)
+                                                        .catch(err => err)
+                                        }
+                                    });
+                                }
+                            } else {
+                                return {
+                                        [reverse_name]: this.mysql.query(`SELECT * FROM ${reverse_table}`) 
+                                                    .then(([results, fields]) => results)
                                                     .catch(err => err)
+                                }
+                            }
                         }
-                    ));
+                    );
                 }
                 return rows;
             }

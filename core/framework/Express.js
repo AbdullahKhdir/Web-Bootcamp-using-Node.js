@@ -1,8 +1,11 @@
 'use strict';
 
-module.exports = class Express{
+const Response = require('../response/types/Response');
+
+module.exports = class Express extends Response{
     
     constructor(framework = require('express')) {
+        super();
         this.framework = framework;
     }
 }

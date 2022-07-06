@@ -8,21 +8,14 @@ module.exports = class Cart extends BaseModel{
 
         this.table = 'node.carts';
         this.reverse_references = {
-            /*
-             SELECT `products`.`id`, `products`.`title`, `products`.`price`, `products`.`imageUrl`, 
-                    `products`.`description`, `products`.`created_at`, `products`.`updated_at`, `products`.`user_id`,
-                    `products`.`price`, `cart_items`.`created_at`, `cart_items`.`updated_at`, 
-                    `cart_items`.`cart_id`, `cart_items`.`product_id` 
-            FROM products 
-            INNER JOIN 
-                    `cart_items` on `products`.`id` = ``cart_items`.`product_id` 
-            AND     `cart_items`.`cart_id` = 1;
-             */
-            getCartItems: {
+            getProducts: {
                 table: 'node.cart_items',
                 class: 'shop/CartItem',
-                column: 'cart_id',
-                where_column: 'user_id'
+                column: 'product_id',
+                setting: {
+                    where_column: 'user_id',
+                    where_table: 'node.products'
+                }
             }
         };
         this.columns = {
