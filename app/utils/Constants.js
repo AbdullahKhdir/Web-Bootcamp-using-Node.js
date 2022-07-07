@@ -1,5 +1,4 @@
 'use strict';
-const _ = require('lodash');
 
 module.exports = class Constants{
     
@@ -13,7 +12,7 @@ module.exports = class Constants{
                 DEFAULT: '/'
             },
             PORTS: {
-                SERVER_PORT: 8009
+                SERVER_PORT: process.env.PORT || 8010
             },
             HTTPS_STATUS: {
                 /*

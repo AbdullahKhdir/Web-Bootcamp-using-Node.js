@@ -1,7 +1,9 @@
+'use strict';
+
 const Constants = require("../../../app/utils/Constants");
 const ApiResponse = require("../ApiResponse");
 
-module.exports =  class Response extends ApiResponse {
+module.exports = class Response extends ApiResponse {
 
     #data;
     #message;

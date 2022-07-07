@@ -1,3 +1,5 @@
+'use strict';
+
 const Db = require("../../node/Db");
 
 class ExecuteSQL extends Db {

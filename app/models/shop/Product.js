@@ -1,3 +1,5 @@
+'use strict';
+
 const BaseModel = require("../../../core/model/BaseModel");
 const Lodash = require("../../utils/Lodash");
 

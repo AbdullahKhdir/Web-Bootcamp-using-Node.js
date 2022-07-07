@@ -9,7 +9,7 @@
         <form class="product-form" action="/admin/edit-product/" method="POST">
             <div class="form-control">
                 <label for="title"><%= page_title %></label>
-                <input type="text" name="title" id="title" value="<%= product.title %>">
+                <input type="text" name="title" id="title" value="<%= lodash.capitalize(product.title) %>">
             </div>
             <div class="form-control">
                 <label for="imageUrl"><%= 'Image url' %></label>
@@ -21,7 +21,7 @@
             </div>
             <div class="form-control">
                 <label for="description"><%= 'Description' %></label>
-                <textarea name="description" id="description" rows="5" ><%= product.description %></textarea>
+                <textarea name="description" id="description" rows="5" ><%= lodash.capitalize(product.description) %></textarea>
             </div>
             <input type="hidden" name="product_id" id="product_id" value="<%= product.id %>">
             <button class="btn" type="submit">

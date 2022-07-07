@@ -6,13 +6,13 @@
     <%- include('../includes/navigation.ejs')  %>
     <% if (typeof product !== 'undefined' && typeof product === 'object') { %>
         <main class="centered">
-            <h1><%= product.title %></h1>
+            <h1><%= lodash.capitalize(product.title) %></h1>
             <hr>
             <div>
-                <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                <img src="<%= product.imageUrl %>" alt="<%= lodash.capitalize(product.title) %>">
             </div>
             <h2><%= product.price %></h2>
-            <p><%= product.description %></p>
+            <p><%= lodash.capitalize(product.description) %></p>
             <%- include('../includes/shop/add_to_cart.ejs', {product: product})  %>
         </main>
     <% } else { %>

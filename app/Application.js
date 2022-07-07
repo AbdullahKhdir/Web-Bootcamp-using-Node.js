@@ -64,6 +64,16 @@ module.exports = class Application extends BaseController {
         app.use(helmet.referrerPolicy());
         app.use(helmet.xssFilter());
 
+
+        /*
+        * DISABLE CORS
+        */
+        const corsOptions = {
+            origin: false,
+        }
+
+        app.use(this.cors(corsOptions));
+
         /*
         * AUTO ESCAPE JSON
         */
@@ -80,14 +90,15 @@ module.exports = class Application extends BaseController {
         app.set('views', 'app/views');
 
         /*
-        * Parse The Requests
+        * Parse JSON-BODY or ANY DATA TYPE Requests
         */
-        app.use(this.body_parser.urlencoded({extended: false}));
+        app.use(this.body_parser.json());
+        app.use(this.body_parser.urlencoded({extended: true}));
         
         /*
         * Middleware To Set Static Public Folder
         */
-        var options = {
+        const options = {
             dotfiles: 'ignore',
             etag: true,
             extensions: ['ejs'],
@@ -111,24 +122,24 @@ module.exports = class Application extends BaseController {
             user_model.get({name: 'Abdullah'})
             .then(rows => {
                 if (!this._.isEmpty(rows)) {
-                        req.registered_user = rows[0];
-                        req.registered_user.getCart = function () {
-                            let Cart = require('../app/models/shop/Cart');
-                            let cart_model = new Cart();
-                            return cart_model.filter({user_id: req.registered_user.id});
-                        };
-                        req.registered_user.getProducts = function () {
-                            let Product = require('../app/models/shop/Product');
-                            let product_model = new Product();
-                            return product_model.filter({user_id: req.registered_user.id});
-                        }
-                        next();
-                    } else {
-                        res.send('<h1>Could not fetch user id</h1>');
-                        res.end();
+                    req.registered_user = rows[0];
+                    req.registered_user.getCart = function () {
+                        let Cart = require('../app/models/shop/Cart');
+                        let cart_model = new Cart();
+                        return cart_model.filter({user_id: req.registered_user.id});
+                    };
+                    req.registered_user.getProducts = function () {
+                        let Product = require('../app/models/shop/Product');
+                        let product_model = new Product();
+                        return product_model.filter({user_id: req.registered_user.id});
                     }
-                })
-                .catch(err => console.log(err));
+                    next();
+                } else {
+                    res.send('<h1>Could not fetch the products</h1>');
+                    res.end();
+                }
+            })
+            .catch(err => console.log(err));
        });
         
         /*

@@ -9,6 +9,9 @@ const Lodash = require("../../utils/Lodash");
 */
 module.exports = class Admin extends BaseController {
     
+    #whitelist;
+    #corsOptions;
+    #corsOptionsDelegate;
     constructor() {
         super();
         this.methods = [
@@ -21,6 +24,31 @@ module.exports = class Admin extends BaseController {
         ];
         this.product_object = new Product();
         this._ = new Lodash()._;
+
+        /*
+         ? CORS CONFIGURATIONS 
+         */
+        const whitelist = ['http://example1.com', 'http://example2.com'];
+        this.#corsOptionsDelegate = function (req, callback) {
+            let corsOptions;
+            if (whitelist.indexOf(req.header('Origin')) !== -1) {
+                // reflect (enable) the requested origin in the CORS response
+                corsOptions = { 
+                    origin:               true,
+                    methods:              ['GET'],
+                    preflightContinue:    false,
+                    maxAge:               86400,
+                    allowedHeaders:       ['Content-Type', 'Authorization'],
+                    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+                }
+            } else {
+                // disable CORS for this request
+                corsOptions = { 
+                    origin:               false,
+                }
+            }
+            callback(null, corsOptions); // callback expects two parameters: error and options
+        }
     }
 
     product() {
@@ -51,7 +79,7 @@ module.exports = class Admin extends BaseController {
                                 page_title: 'Edit Product',
                                 path : '/admin/edit-product/',
                                 product_id: product_id,
-                                // editing: edit_mode,
+                                lodash: this._,
                                 product: product
                             }
                         );
@@ -62,24 +90,6 @@ module.exports = class Admin extends BaseController {
                 .catch((err) => {
                     throw err;
                 });
-            } else if (this._.isNumber(product_id)) {
-                // this.product_object.filter(product_id)
-                // .then(rows => {
-                //     const product = rows[0];
-                //     res.render(
-                //         'admin/edit-product',
-                //         {
-                //             page_title: 'Edit Product',
-                //             path : '/admin/edit-product/',
-                //             product_id: product_id,
-                //             // editing: edit_mode,
-                //             product: product
-                //         }
-                //     );
-                // })
-                // .catch((err) => {
-                //     throw err;
-                // });
             } else {
                 return res.redirect('/');
             }
@@ -89,9 +99,9 @@ module.exports = class Admin extends BaseController {
     postEditedProduct() {
         return this.getRouterInstance().post('/admin/edit-product/', (req, res, next) => {
             const product_id = +req.body.product_id ?? false;
-            const title = req.body.title ?? false;
+            const title = this._.capitalize(req.body.title) ?? false;
             const price = req.body.price ?? false;
-            const description = req.body.description ?? false;
+            const description = this._.capitalize(req.body.description) ?? false;
             const image = req.body.imageUrl ?? false;
 
             const values = {
@@ -115,9 +125,9 @@ module.exports = class Admin extends BaseController {
 
     addProduct() {
         return this.getRouterInstance().post('/admin/add-product', (req, res, next) => {
-            const title       = req.body.title;
+            const title       = this._.capitalize(req.body.title);
             const imageUrl    = req.body.imageUrl;
-            const description = req.body.description;
+            const description = this._.capitalize(req.body.description);
             const price       = req.body.price;
             const user_id     = req.registered_user.id;
 
@@ -156,7 +166,7 @@ module.exports = class Admin extends BaseController {
     }
 
     products() {
-        return this.getRouterInstance().get('/admin/products', (req, res, next) => {
+        return this.getRouterInstance().get('/admin/products', this.cors(this.#corsOptionsDelegate), (req, res, next) => {
             const user_products = req.registered_user.getProducts();
             user_products
                 .then(rows => {
@@ -164,6 +174,7 @@ module.exports = class Admin extends BaseController {
                         'admin/products',
                         {
                             products: rows,
+                            lodash: this._,
                             page_title: 'Admin Products',
                             path : '/admin/products/'
                         }

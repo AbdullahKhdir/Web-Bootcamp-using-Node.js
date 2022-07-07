@@ -1,3 +1,5 @@
+'use strict';
+
 const Constants = require("../../app/utils/Constants");
 
 module.exports = class ApiResponse {

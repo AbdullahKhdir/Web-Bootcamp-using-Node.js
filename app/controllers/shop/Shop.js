@@ -30,6 +30,18 @@ module.exports = class Shop extends BaseController{
         this.product     = new Product();
         this.cart_object = new Cart();
         this.cart_items_object = new CartItem();
+
+        /*
+         ? DEMO OF THE CORS CONFIGURATIONS 
+         */
+        this.corsOptions = {
+            origin:               'http://localhost:9009.com',
+            methods:              ['GET'],
+            preflightContinue:    false,
+            maxAge:               86400,
+            allowedHeaders:       ['Content-Type', 'Authorization'],
+            optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+        }
     }
 
     products = () => this.getRouterInstance().get('/products', (req, res, next) => {
@@ -41,13 +53,14 @@ module.exports = class Shop extends BaseController{
                     {
                         products: rows,
                         page_title: 'All Products',
-                        path: '/products/'
+                        path: '/products/',
+                        lodash: this._
                     }
                 );
             });
     });
 
-    index = () => this.getRouterInstance().get('/shop', (req, res, next) => {
+    index = () => this.getRouterInstance().get('/shop', this.cors(this.corsOptions),(req, res, next) => {
         const user_products = req.registered_user.getProducts();
         // throw new BadRequestError('User not registered');
         // return new JsonResponse('SUCCESS', this._.pick({ 'a': 1, 'b': '2', 'c': 3 }, ['a', 'c'])).sendAsJson(res);
@@ -59,7 +72,8 @@ module.exports = class Shop extends BaseController{
                     {
                         products: rows,
                         page_title: 'Shop',
-                        path: '/'
+                        path: '/',
+                        lodash: this._
                     }
                 );
             })
@@ -87,7 +101,8 @@ module.exports = class Shop extends BaseController{
                                         {
                                             page_title: 'My Cart',
                                             path : '/cart/',
-                                            products: cart_products
+                                            products: cart_products,
+                                            lodash: this._                                            
                                         }
                                     );
                                 })
@@ -150,7 +165,8 @@ module.exports = class Shop extends BaseController{
                         {
                             page_title: product.title ?? 'Product Details',
                             path: '/products/',
-                            product: product
+                            product: product,
+                            lodash: this._
                         }
                     );
                 }
