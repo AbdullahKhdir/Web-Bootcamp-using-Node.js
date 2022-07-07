@@ -12,7 +12,7 @@
                         <p>
                             <%= lodash.capitalize(product.title) ?? 'Not Found ' %> (<%= product.quantity %>) 
                             <form action="/cart/delete-item/" method="post">
-                                <input type="hidden" name="product_id" value="<%= product.id  %>">
+                                <input type="hidden" name="product_id" value="<%= product.product_id  %>">
                                 <button class="btn" type="submit">
                                     Delete
                                 </button>

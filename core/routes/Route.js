@@ -2,24 +2,27 @@
 
 const Express = require('../framework/Express');
 
-module.exports = class Routes extends Express{
+module.exports = class Routes extends Express {
     
-    #framework;
     constructor() {
         super();
 
         if (typeof this.router !== 'undefined') {
-            return this.getInstance();
+            return this.getRouterInstance();
         }
-        this.#framework = new Express().framework
+        this.framework = new Express().framework
         
         /*
         * This line of code is responsible for the 
         * difference between "/route" and "/route/" 
-        */        
-        this.#framework.Router({strict: false});
-
-        this.router     = this.framework.Router();
+        */
+        const options = {
+            caseSensitive: true, // treating “/Foo” and “/foo” as the same.
+            mergeParams: true, // Preserve the req.params values from the parent router. If the parent and the child have conflicting param names, the child’s value take precedence.
+            strict: false, // Enable strict routing.
+        }
+        this.framework.Router(options);
+        this.router     = this.framework.Router(options);
         this.express    = this.framework;
     }
 

@@ -5,8 +5,6 @@ const ApiResponse = require("../ApiResponse");
 
 module.exports = class Response extends ApiResponse {
 
-    #data;
-    #message;
     constructor() {
         const _constants = Object.assign(new Constants());
         super(_constants.getConstants().HTTPS_STATUS.SUCCESS.OK, 'OK');

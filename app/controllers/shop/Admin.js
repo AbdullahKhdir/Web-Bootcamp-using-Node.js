@@ -9,8 +9,6 @@ const Lodash = require("../../utils/Lodash");
 */
 module.exports = class Admin extends BaseController {
     
-    #whitelist;
-    #corsOptions;
     #corsOptionsDelegate;
     constructor() {
         super();
@@ -27,7 +25,7 @@ module.exports = class Admin extends BaseController {
 
         /*
          ? CORS CONFIGURATIONS 
-         */
+        */
         const whitelist = ['http://example1.com', 'http://example2.com'];
         this.#corsOptionsDelegate = function (req, callback) {
             let corsOptions;
@@ -51,53 +49,48 @@ module.exports = class Admin extends BaseController {
         }
     }
 
-    product() {
-        return this.getRouterInstance().get('/admin/add-product', (req, res, next) => {
-            res.render(
-                'admin/add-product',
-                {
-                    page_title: 'Add Product',
-                    path : '/admin/add-product/'
-                }
-            );
-        });
-    }
-
-    editProduct() {
-        return this.getRouterInstance().get('/admin/edit-product/:product_id', (req, res, next) => {
-            const product_id = +req.params.product_id ?? false;
-            const user_id    = +req.registered_user.id;
-            
-            if (this._.isNumber(user_id) && this._.isNumber(product_id)) {
-                this.product_object.filter({id: product_id, user_id: user_id})
-                .then(rows => {
-                    if (!this._.isEmpty(rows)) {
-                        const product = rows[0];
-                        res.render(
-                            'admin/edit-product',
-                            {
-                                page_title: 'Edit Product',
-                                path : '/admin/edit-product/',
-                                product_id: product_id,
-                                lodash: this._,
-                                product: product
-                            }
-                        );
-                    } else {
-                        res.redirect('/products/');
-                    }
-                })
-                .catch((err) => {
-                    throw err;
-                });
-            } else {
-                return res.redirect('/');
+    product = () => this.getRouterInstance().get('/admin/add-product', (req, res, next) => {
+        res.render(
+            'admin/add-product',
+            {
+                page_title: 'Add Product',
+                path : '/admin/add-product/'
             }
-        });
-    }
+        );
+    });
 
-    postEditedProduct() {
-        return this.getRouterInstance().post('/admin/edit-product/', (req, res, next) => {
+    editProduct = () => this.getRouterInstance().get('/admin/edit-product/:product_id', (req, res, next) => {
+        const product_id = +req.params.product_id ?? false;
+        const user_id    = +req.registered_user.id;
+        
+        if (this._.isNumber(user_id) && this._.isNumber(product_id)) {
+            this.product_object.filter({id: product_id, user_id: user_id})
+            .then(rows => {
+                if (!this._.isEmpty(rows)) {
+                    const product = rows[0];
+                    res.render(
+                        'admin/edit-product',
+                        {
+                            page_title: 'Edit Product',
+                            path : '/admin/edit-product/',
+                            product_id: product_id,
+                            lodash: this._,
+                            product: product
+                        }
+                    );
+                } else {
+                    res.redirect('/products/');
+                }
+            })
+            .catch((err) => {
+                throw err;
+            });
+        } else {
+            return res.redirect('/');
+        }
+    });
+
+    postEditedProduct = () => this.getRouterInstance().post('/admin/edit-product/', (req, res, next) => {
             const product_id = +req.body.product_id ?? false;
             const title = this._.capitalize(req.body.title) ?? false;
             const price = req.body.price ?? false;
@@ -120,11 +113,9 @@ module.exports = class Admin extends BaseController {
                     throw err;
                 });
             }
-        });
-    }
+    });
 
-    addProduct() {
-        return this.getRouterInstance().post('/admin/add-product', (req, res, next) => {
+    addProduct = () => this.getRouterInstance().post('/admin/add-product', (req, res, next) => {
             const title       = this._.capitalize(req.body.title);
             const imageUrl    = req.body.imageUrl;
             const description = this._.capitalize(req.body.description);
@@ -140,46 +131,41 @@ module.exports = class Admin extends BaseController {
             }).catch((err) => {
                 throw err;
             });
-        });
-    }
+    });
 
-    deleteProduct() {
-        return this.getRouterInstance().post('/admin/delete-product/', (req, res, next) => {
-            const product_id = req.body.product_id ?? false;
-            const user_id = +req.registered_user.id ?? false;
-            
-            if (product_id && user_id) {
-                this.product_object.get({id: product_id, user_id: user_id})
-                    .then(rows => {
-                       if (!this._.isEmpty(rows)) {
-                            const id = rows[0].id;
-                            this.product_object.delete(id).then((result) => {
-                                res.redirect('/admin/products/');
-                            }).catch((err) => {
-                                throw err
-                            });                
-                        }
-                    })
-                    .catch(err => console.log(err));
-            }
-        });
-    }
-
-    products() {
-        return this.getRouterInstance().get('/admin/products', this.cors(this.#corsOptionsDelegate), (req, res, next) => {
-            const user_products = req.registered_user.getProducts();
-            user_products
+    deleteProduct = () => this.getRouterInstance().post('/admin/delete-product/', (req, res, next) => {
+        const product_id = req.body.product_id ?? false;
+        const user_id = +req.registered_user.id ?? false;
+        
+        if (product_id && user_id) {
+            this.product_object.get({id: product_id, user_id: user_id})
                 .then(rows => {
-                    res.render(
-                        'admin/products',
-                        {
-                            products: rows,
-                            lodash: this._,
-                            page_title: 'Admin Products',
-                            path : '/admin/products/'
-                        }
-                    );
-                });
-        });
-    }
+                    if (!this._.isEmpty(rows)) {
+                        const id = rows[0].id;
+                        this.product_object.delete(id).then((result) => {
+                            res.redirect('/admin/products/');
+                        }).catch((err) => {
+                            throw err
+                        });                
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+    });
+
+    products = () => this.getRouterInstance().get('/admin/products', this.cors(this.#corsOptionsDelegate), (req, res, next) => {
+        const user_products = req.registered_user.getProducts();
+        user_products
+            .then(rows => {
+                res.render(
+                    'admin/products',
+                    {
+                        products: rows ?? [],
+                        lodash: this._,
+                        page_title: 'Admin Products',
+                        path : '/admin/products/'
+                    }
+                );
+            });
+    });
 }

@@ -2,12 +2,13 @@
 /*
 * Npm and Node Modules 
 */
-const Bodyparser     = require('../core/node/Bodyparser.js');
-const Path           = require('../core/node/Path.js');
-const BaseController = require('../core/controller/BaseController.js');
-const Constants      = require('./utils/Constants.js');
-const Lodash         = require('./utils/Lodash.js');
-const helmet         = require("helmet");
+const Bodyparser      = require('../core/node/Bodyparser.js');
+const Path            = require('../core/node/Path.js');
+const BaseController  = require('../core/controller/BaseController.js');
+const Constants       = require('./utils/Constants.js');
+const Lodash          = require('./utils/Lodash.js');
+const Helmet          = require("helmet");
+const BadRequestError = require('../core/error/types/BadRequestError.js');
 
 module.exports = class Application extends BaseController {
 
@@ -48,21 +49,21 @@ module.exports = class Application extends BaseController {
           ! referrerPolicy
           ! xssFilter
         */
-        app.use(helmet.contentSecurityPolicy());
-        app.use(helmet.crossOriginEmbedderPolicy());
-        app.use(helmet.crossOriginOpenerPolicy());
-        app.use(helmet.crossOriginResourcePolicy());
-        app.use(helmet.dnsPrefetchControl());
-        app.use(helmet.expectCt());
-        app.use(helmet.frameguard());
-        app.use(helmet.hidePoweredBy());
-        app.use(helmet.hsts());
-        app.use(helmet.ieNoOpen());
-        app.use(helmet.noSniff());
-        app.use(helmet.originAgentCluster());
-        app.use(helmet.permittedCrossDomainPolicies());
-        app.use(helmet.referrerPolicy());
-        app.use(helmet.xssFilter());
+        app.use(Helmet.contentSecurityPolicy());
+        app.use(Helmet.crossOriginEmbedderPolicy());
+        app.use(Helmet.crossOriginOpenerPolicy());
+        app.use(Helmet.crossOriginResourcePolicy());
+        app.use(Helmet.dnsPrefetchControl());
+        app.use(Helmet.expectCt());
+        app.use(Helmet.frameguard());
+        app.use(Helmet.hidePoweredBy());
+        app.use(Helmet.hsts());
+        app.use(Helmet.ieNoOpen());
+        app.use(Helmet.noSniff());
+        app.use(Helmet.originAgentCluster());
+        app.use(Helmet.permittedCrossDomainPolicies());
+        app.use(Helmet.referrerPolicy());
+        app.use(Helmet.xssFilter());
 
 
         /*
@@ -95,6 +96,7 @@ module.exports = class Application extends BaseController {
         app.use(this.body_parser.json());
         app.use(this.body_parser.urlencoded({extended: true}));
         
+
         /*
         * Middleware To Set Static Public Folder
         */
@@ -108,7 +110,7 @@ module.exports = class Application extends BaseController {
             maxAge: '1d',
             redirect: false,
             setHeaders: function (res, path, stat) {
-              res.set('x-timestamp', Date.now())
+                res.set('x-timestamp', Date.now())
             }
         }
         app.use(this.express.static(this.path.join(__dirname, 'public'), options));
@@ -135,8 +137,7 @@ module.exports = class Application extends BaseController {
                     }
                     next();
                 } else {
-                    res.send('<h1>Could not fetch the products</h1>');
-                    res.end();
+                    throw new BadRequestError('User not registered');
                 }
             })
             .catch(err => console.log(err));

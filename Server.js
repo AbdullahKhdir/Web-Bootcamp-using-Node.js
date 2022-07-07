@@ -11,7 +11,7 @@ class Server extends Application{
     run() {
         let port = Server.init().port();
         this.getApp().listen(port, () => {
-            console.log('Express Server Is Running!');
+            console.log('\u001b[' + 46 + 'm' + 'Express Server Is Running On Port ' + port + '!' + '\u001b[0m');
         });
     }
 
