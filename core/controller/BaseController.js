@@ -5,6 +5,7 @@ const Path        = require("../node/Path");
 const FileSystem  = require("../node/FileSystem");
 const Lodash      = require("../../app/utils/Lodash");
 const Application = require("../../app/Application");
+const Constants   = require("../../app/utils/Constants");
 
 module.exports = class BaseController extends Routes {
     constructor() {
@@ -101,9 +102,11 @@ module.exports = class BaseController extends Routes {
      * @author Khdir, Abdullah <abdullahkhder77@gmail.com>
      * @param {Application} app
      */
-    undefinedRoutes(app) {        
+    undefinedRoutes(app) {
         let site_is_found              = false;
         let is_post_request_successful = false;
+        let _constants                 = new Constants().getConstants();
+        
         app.use(this.getRouterInstance().get('*', (req, res, next) => {
             let route, routes = [];
             
@@ -119,7 +122,7 @@ module.exports = class BaseController extends Routes {
             });
             
             if (req.path === '/') {
-                res.redirect('/shop');
+                res.redirect('/shop/');
                 res.end();
                 return;
             }
@@ -134,15 +137,21 @@ module.exports = class BaseController extends Routes {
                 /*
                 * "/route" is same as "/route/"
                 */
-                if (this._.endsWith(requested_path_in_browser, '/')) {
-                    requested_path_in_browser = this._.trimEnd(requested_path_in_browser, '/');
+                if (this._.endsWith(requested_path_in_browser, '/') || this._.endsWith(predefined_direction_from_route, '/')) {
+                    requested_path_in_browser       = this._.trimEnd(requested_path_in_browser, '/');
+                    predefined_direction_from_route = this._.trimEnd(predefined_direction_from_route, '/');
                 }      
 
-                if (predefined_direction_from_route === requested_path_in_browser && route.methods.get) {
-                    site_is_found = true;
-                }
-
                 if (predefined_direction_from_route.includes(':')) {
+                    const _predefined_direction_from_route = predefined_direction_from_route.substr(0, predefined_direction_from_route.indexOf(':') - 1);
+                    const _predefined_direction_from_route_length = _predefined_direction_from_route.length;
+                    const _requested_path_in_browser = requested_path_in_browser.substr(0, _predefined_direction_from_route_length);
+                    if (_predefined_direction_from_route === _requested_path_in_browser) {
+                        site_is_found = true;
+                    }
+                }
+                
+                if (predefined_direction_from_route === requested_path_in_browser && route.methods.get) {
                     site_is_found = true;
                 }
             });
@@ -151,7 +160,13 @@ module.exports = class BaseController extends Routes {
                 next();
                 site_is_found = false;
             } else {
-                res.status(404).render('404', {page_title: 'Page not found', path: '/404'});
+                return this.render(
+                    res,
+                    '404',
+                    {page_title: 'Page not found', path: '/404/'},
+                    null,
+                    _constants.HTTPS_STATUS.CLIENT_ERRORS.SITE_NOT_FOUND
+                );
             }
         }));
 
@@ -179,15 +194,23 @@ module.exports = class BaseController extends Routes {
                 /*
                 * "/route" is same as "/route/"
                 */
-                if (this._.endsWith(requested_path_in_browser, '/')) {
-                    requested_path_in_browser = this._.trimEnd(requested_path_in_browser, '/');
+                if (this._.endsWith(requested_path_in_browser, '/') || this._.endsWith(predefined_direction_from_route, '/')) {
+                    requested_path_in_browser       = this._.trimEnd(requested_path_in_browser, '/');
+                    predefined_direction_from_route = this._.trimEnd(predefined_direction_from_route, '/');
                 }
 
-                if (predefined_direction_from_route === requested_path_in_browser && route.methods.post) {
-                    is_post_request_successful = true;
-                }
-
+                
                 if (predefined_direction_from_route.includes(':')) {
+                    const _predefined_direction_from_route = predefined_direction_from_route.substr(0, predefined_direction_from_route.indexOf(':') - 1);
+                    const _predefined_direction_from_route_length = _predefined_direction_from_route.length;
+                    const _requested_path_in_browser = requested_path_in_browser.substr(0, _predefined_direction_from_route_length);
+                    if (_predefined_direction_from_route === _requested_path_in_browser) {
+                        is_post_request_successful = true;
+                    }
+                }
+                
+                
+                if (predefined_direction_from_route === requested_path_in_browser && route.methods.post) {
                     is_post_request_successful = true;
                 }
             });
@@ -196,7 +219,13 @@ module.exports = class BaseController extends Routes {
                 next();
                 is_post_request_successful = false;
             } else {
-                res.status(404).render('404', {page_title: 'Page not found', path: '/404'});
+                return this.render(
+                    res,
+                    '404',
+                    {page_title: 'Cannot post!', path: '/404/', onPost: 'Route does not support posting requests!'},
+                    null,
+                    _constants.HTTPS_STATUS.SERVER_ERRORS.INTERNAL_SERVER_ERROR
+                );
             }
         }));
     }

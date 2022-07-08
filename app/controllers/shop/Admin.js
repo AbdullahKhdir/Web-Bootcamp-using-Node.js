@@ -49,7 +49,7 @@ module.exports = class Admin extends BaseController {
         }
     }
 
-    product = () => this.getRouterInstance().get('/admin/add-product', (req, res, next) => {
+    product           = () => this.getRouterInstance().get('/admin/add-product/', (req, res, next) => {
         res.render(
             'admin/add-product',
             {
@@ -59,7 +59,7 @@ module.exports = class Admin extends BaseController {
         );
     });
 
-    editProduct = () => this.getRouterInstance().get('/admin/edit-product/:product_id', (req, res, next) => {
+    editProduct       = () => this.getRouterInstance().get('/admin/edit-product/:product_id/', (req, res, next) => {
         const product_id = +req.params.product_id ?? false;
         const user_id    = +req.registered_user.id;
         
@@ -107,7 +107,7 @@ module.exports = class Admin extends BaseController {
             if (product_id) {
                 this.product_object.update(values, product_id).then((result) => {
                     if (result[0].affectedRows) {
-                        return res.redirect('/admin/products');
+                        return res.redirect('/admin/products/');
                     }
                 }).catch((err) => {
                     throw err;
@@ -115,7 +115,7 @@ module.exports = class Admin extends BaseController {
             }
     });
 
-    addProduct = () => this.getRouterInstance().post('/admin/add-product', (req, res, next) => {
+    addProduct        = () => this.getRouterInstance().post('/admin/add-product/', (req, res, next) => {
             const title       = this._.capitalize(req.body.title);
             const imageUrl    = req.body.imageUrl;
             const description = this._.capitalize(req.body.description);
@@ -133,7 +133,7 @@ module.exports = class Admin extends BaseController {
             });
     });
 
-    deleteProduct = () => this.getRouterInstance().post('/admin/delete-product/', (req, res, next) => {
+    deleteProduct     = () => this.getRouterInstance().post('/admin/delete-product/', (req, res, next) => {
         const product_id = req.body.product_id ?? false;
         const user_id = +req.registered_user.id ?? false;
         
@@ -153,7 +153,7 @@ module.exports = class Admin extends BaseController {
         }
     });
 
-    products = () => this.getRouterInstance().get('/admin/products', this.cors(this.#corsOptionsDelegate), (req, res, next) => {
+    products          = () => this.getRouterInstance().get('/admin/products/', this.cors(this.#corsOptionsDelegate), (req, res, next) => {
         const user_products = req.registered_user.getProducts();
         user_products
             .then(rows => {

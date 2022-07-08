@@ -17,9 +17,10 @@ module.exports = class Routes extends Express {
         * difference between "/route" and "/route/" 
         */
         const options = {
-            caseSensitive: true, // treating “/Foo” and “/foo” as the same.
-            mergeParams: true, // Preserve the req.params values from the parent router. If the parent and the child have conflicting param names, the child’s value take precedence.
-            strict: false, // Enable strict routing.
+            caseSensitive: false, // treating “/Foo” and “/foo” as the same.
+            mergeParams: true,    // Preserve the req.params values from the parent router.
+                                  // If the parent and the child have conflicting param names, the child’s value take precedence.
+            strict: true,         // Enable strict routing.
         }
         this.framework.Router(options);
         this.router     = this.framework.Router(options);
