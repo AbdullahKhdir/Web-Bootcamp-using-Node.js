@@ -5,6 +5,8 @@
 
 <p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=abdullahkhdir" alt="abdullahkhdir" /></a> </p>
 
+<p><img align="right" src="https://github.com/Adam-pw/Adam-pw/blob/main/animation_500_kxa883sd.gif" alt="adam-pw" /></p>
+
 - 🔭 I’m currently working in Telecom on big Tool called [Organizing, managing, archiving and arranging company contracts](https://myshs24.telekom.de/)
 
 - 🌱 I’m currently learning and building a Framework using Node & Express JS **Express, Node JS**
